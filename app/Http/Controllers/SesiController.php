@@ -27,7 +27,13 @@ class SesiController extends Controller
         ];
 
         if(Auth::attempt($ilogin)){
-            return redirect('admin');
+            if(Auth::user()->role == 'admin'){
+                return redirect('admin');
+            }elseif(Auth::user()->role == 'penulis') {
+                return redirect('penulis');
+            }elseif(Auth::user()->role == 'pembaca') {
+                return redirect('pembaca');
+            }
         } else {
             return redirect('')->withErrors('error username dan password tidak ditemukan')->withInput();
         }

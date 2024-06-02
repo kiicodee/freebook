@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['guest'])->group(function () {
-Route::get('/', [SesiController::class, 'index']);
+Route::get('/', [SesiController::class, 'index'])->name('login');
 Route::post('/', [SesiController::class, 'login']);
 });
 
@@ -24,6 +24,19 @@ Route::get('/home', function() {
     return redirect('/admin');
 });
 
-Route::get('/admin', [AdminController::class, 'index']);
-Route::get('/logout', [SesiController::class, 'logout']);
+
+Route::middleware(['auth'])->group(function(){
+    Route::get('/admin', [AdminController::class, 'admin'])->middleware('UserAccess:admin');
+
+
+    Route::get('/penulis', [AdminController::class, 'penulis'])->middleware('UserAccess:penulis');
+
+
+    Route::get('/pembaca', [AdminController::class, 'pembaca'])->middleware('UserAccess:pembaca');
+
+    
+    Route::get('/logout', [SesiController::class, 'logout']);
+});
+
+
 
